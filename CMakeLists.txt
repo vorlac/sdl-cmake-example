@@ -30,7 +30,7 @@ option(
 set(FORCE_STATIC_VCRT OFF)
 set(BUILD_SHARED_LIBS OFF)
 
-# SDL3 build options
+# SDL build options
 set(SDL_LIBC OFF)
 set(SDL_VULKAN ON)
 set(SDL_SHARED OFF)
