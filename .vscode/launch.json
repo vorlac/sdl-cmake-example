@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "debug [vsdbg]",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "requireExactSource": true,
+            "symbolOptions": {
+                "searchPaths": [
+                    "${workspaceFolder}"
+                ],
+                "searchMicrosoftSymbolServer": true
+            },
+            "program": "${command:cmake.launchTargetPath}",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "internalConsoleOptions": "openOnSessionStart",
+            "console": "integratedTerminal"
+        }
+    ]
+}
