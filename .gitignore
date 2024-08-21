@@ -1,4 +1,6 @@
 .out/
+.idea/
+cmake-build-*/
 
 .vs/**
 !.vs/launch.vs.json

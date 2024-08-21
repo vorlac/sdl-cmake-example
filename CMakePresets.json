@@ -78,11 +78,6 @@
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "gcc",
                 "CMAKE_CXX_COMPILER": "g++"
-            },
-            "condition": {
-                "type": "notEquals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
             }
         },
         {
@@ -116,11 +111,6 @@
             "cacheVariables": {
                 "CMAKE_C_COMPILER": "clang",
                 "CMAKE_CXX_COMPILER": "clang++"
-            },
-            "condition": {
-                "type": "notEquals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Windows"
             }
         },
         {

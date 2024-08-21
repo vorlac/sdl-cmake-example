@@ -72,18 +72,12 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
 )
 
 target_compile_options(${PROJECT_NAME} PRIVATE
-  /Zc:preprocessor
-  /utf-8
-  /EHsc
-  /nologo
-  
   $<$<CONFIG:Debug>:
       # debug only compiler options
   >
   
   $<$<CONFIG:Release>:
       # release only compiler options
-      /Ox
   >
 )
 
