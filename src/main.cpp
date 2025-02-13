@@ -1,62 +1,68 @@
-#include <cstdlib>
 #include <iostream>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_main.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
+#include <SDL3/SDL_surface.h>
 
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
-    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) == 0) {
         std::cerr << "SDL_Init Error: " << SDL_GetError() << '\n';
-        return EXIT_FAILURE;
+        return 1;
     }
 
-    SDL_Window* win =
-        SDL_CreateWindow("Hello World!", 100, 100, 620, 387, SDL_WINDOW_SHOWN);
-    if (win == nullptr) {
-        std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << '\n';
-        return EXIT_FAILURE;
-    }
-
-    SDL_Renderer* ren = SDL_CreateRenderer(
-        win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-    if (ren == nullptr) {
-        std::cerr << "SDL_CreateRenderer Error" << SDL_GetError() << '\n';
-        if (win != nullptr)
-            SDL_DestroyWindow(win);
+    SDL_Window* win{ nullptr };
+    SDL_Renderer* ren{ nullptr };
+    if (SDL_CreateWindowAndRenderer("Hello World!", 620, 387, SDL_WINDOW_RESIZABLE, &win, &ren) == 0) {
+        std::cerr << "SDL_CreateWindowAndRenderer Error: " << SDL_GetError() << '\n';
         SDL_Quit();
-        return EXIT_FAILURE;
+        return 1;
     }
 
     SDL_Surface* bmp = SDL_LoadBMP("resources/grumpy-cat.bmp");
-    if (bmp == nullptr) {
+    if (bmp == NULL) {
         std::cerr << "SDL_LoadBMP Error: " << SDL_GetError() << '\n';
-        if (ren != nullptr)
-            SDL_DestroyRenderer(ren);
-        if (win != nullptr)
-            SDL_DestroyWindow(win);
+        SDL_DestroyRenderer(ren);
+        SDL_DestroyWindow(win);
         SDL_Quit();
-        return EXIT_FAILURE;
+        return 1;
     }
 
     SDL_Texture* tex = SDL_CreateTextureFromSurface(ren, bmp);
-    if (tex == nullptr) {
+    if (tex == NULL) {
         std::cerr << "SDL_CreateTextureFromSurface Error: " << SDL_GetError() << '\n';
-        if (bmp != nullptr)
-            SDL_FreeSurface(bmp);
-        if (ren != nullptr)
-            SDL_DestroyRenderer(ren);
-        if (win != nullptr)
-            SDL_DestroyWindow(win);
+        SDL_DestroySurface(bmp);
+        SDL_DestroyRenderer(ren);
+        SDL_DestroyWindow(win);
         SDL_Quit();
-        return EXIT_FAILURE;
+        return 1;
     }
-    SDL_FreeSurface(bmp);
 
-    for (int i = 0; i < 20; i++) {
+    SDL_DestroySurface(bmp);
+
+    SDL_Event e;
+    bool quit = false;
+    Uint32 startTime = SDL_GetTicks();
+
+    while (!quit) {
+        while (SDL_PollEvent(&e)) {
+            if (e.type == SDL_EVENT_QUIT) {
+                quit = true;
+            }
+            if (e.type == SDL_EVENT_KEY_DOWN) {
+                if (e.key.scancode == SDL_SCANCODE_ESCAPE) {
+                    quit = true;
+                }
+            }
+        }
+
+        Uint32 elapsedTime = SDL_GetTicks() - startTime;
+        if (elapsedTime > 2000) {
+            break;
+        }
+
         SDL_RenderClear(ren);
-        SDL_RenderCopy(ren, tex, nullptr, nullptr);
+        SDL_RenderTexture(ren, tex, NULL, NULL);
         SDL_RenderPresent(ren);
         SDL_Delay(100);
     }
@@ -66,5 +72,5 @@ int main(int argc, char** argv)
     SDL_DestroyWindow(win);
     SDL_Quit();
 
-    return EXIT_SUCCESS;
+    return 0;
 }

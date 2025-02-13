@@ -4,7 +4,8 @@
         {
             "name": "C++ (CMake)",
             "configurationProvider": "ms-vscode.cmake-tools",
-            "cppStandard": "c++23"
+            "cppStandard": "c++23",
+            "cStandard": "c23"
         }
     ]
 }

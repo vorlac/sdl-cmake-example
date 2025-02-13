@@ -31,8 +31,6 @@ set(FORCE_STATIC_VCRT OFF)
 set(BUILD_SHARED_LIBS OFF)
 
 # SDL build options
-set(SDL_LIBC OFF)
-set(SDL_VULKAN ON)
 set(SDL_SHARED OFF)
 set(SDL_STATIC ON)
 
@@ -57,37 +55,13 @@ target_compile_features(${PROJECT_NAME} PRIVATE
     cxx_std_23
 )
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE
-  NOMINMAX
-  WIN32_LEAN_AND_MEAN
-  VC_EXTRALEAN
-
-  $<$<CONFIG:Debug>:
-      # debug only msvc defs
-  >
-
-  $<$<CONFIG:Release>:
-      # release only msvc defs
-  >
-)
-
-target_compile_options(${PROJECT_NAME} PRIVATE
-  $<$<CONFIG:Debug>:
-      # debug only compiler options
-  >
-  
-  $<$<CONFIG:Release>:
-      # release only compiler options
-  >
-)
-
-target_include_directories(${PROJECT_NAME}
-  PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src"
+target_include_directories(${PROJECT_NAME} PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/src"
+    "${CMAKE_CURRENT_SOURCE_DIR}/extern/sdl/include"
 )
 
 target_link_libraries(${PROJECT_NAME}
-    PRIVATE $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
-    PRIVATE $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+    PRIVATE $<IF:$<TARGET_EXISTS:SDL3::SDL3>,SDL3::SDL3,SDL3::SDL3-static>
 )
 
 add_custom_command(TARGET ${PROJECT_NAME}
